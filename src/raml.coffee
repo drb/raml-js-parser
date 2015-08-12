@@ -8,6 +8,7 @@ class @FileReader
   constructor: (readFileAsyncOverride) ->
     @q    = require 'q'
     @url  = require 'url'
+    @query = require 'querystring'
 
     if readFileAsyncOverride
       @readFileAsyncOverride = readFileAsyncOverride
@@ -29,6 +30,7 @@ class @FileReader
   ###
   fetchLocalFileAsync: (file) ->
     deferred = @q.defer()
+    file = @query.unescape(file)
     require('fs').readFile file, (err, data) =>
       if (err)
         deferred.reject(new exports.FileError "while reading #{file}", null, "cannot read #{file} (#{err})", @start_mark)
